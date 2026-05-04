@@ -1,0 +1,32 @@
+name: Build GenP
+
+on: 
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "GenP Version"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Downloading dependencies and building
+        env:
+          Version: ${{ inputs.tag }}
+        run: |
+          .\GenP.ps1
+
+      - name: Uploading
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $Tag = "${{ inputs.tag }}"
+          $GenP = (Get-Item -Path "GenP\GenP*.exe").FullName
+          gh release create $Tag $GenP --title $Tag
