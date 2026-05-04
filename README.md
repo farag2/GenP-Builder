@@ -13,7 +13,7 @@
 
 # GenP Builder
 
-Build GenP patcher using the official sources via GitHub Actions
+Build GenP patcher from the official [sources](https://wiki.dbzer0.com/genp-guides/guide) to patch Adobe's products via GitHub Actions
 
 > [!WARNING]  
 > This repository is not affiliated with Adobe. The source code is provided as is and for educational purposes only. Use at your own risk. Using piracy software is an illegal act.
