@@ -28,10 +28,6 @@ git clone https://github.com/farag2/GenP-Builder
 
 * Move to [`Build`](https://github.com/farag2/GenP-Builder/actions/workflows/Build.yml) and run a new workflow by setting release name according to the GenP version from the [site](https://wiki.dbzer0.com/genp-guides/guide/#latest).
 
-  * The current code is written for `4.0.3` GenP version.
-
-<img width="819" height="234" src="https://github.com/user-attachments/assets/f4d5d6d3-f1f2-4171-9bd1-c8cb6fed99cf" />
-
 <img width="1936" height="692" src="https://github.com/user-attachments/assets/d6e741ce-16c3-4de4-a083-996b5eba56c6" />
 
 ## Link
