@@ -26,7 +26,7 @@ Build GenP patcher from the official [sources](https://wiki.dbzer0.com/genp-guid
 git clone https://github.com/farag2/GenP-Builder
 ```
 
-* Move to [`Build`](https://github.com/farag2/GenP-Builder/actions/workflows/Build.yml) and run a new workflow by setting release name according to the GenP version from the [site](https://wiki.dbzer0.com/genp-guides/guide/#latest).
+* Edit download link in `GenP.ps1` file and run `Build GenP` workflow with setting release name according to the GenP version from the [site](https://wiki.dbzer0.com/genp-guides/guide/#latest).
 
 <img width="1936" height="692" src="https://github.com/user-attachments/assets/d6e741ce-16c3-4de4-a083-996b5eba56c6" />
 
