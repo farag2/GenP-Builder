@@ -22,14 +22,12 @@ $Parameters = @{
 }
 Invoke-WebRequest @Parameters
 
-# Get runner Downloads folder
-Get-ChildItem -Path $env:GITHUB_WORKSPACE -File -recurse -force
-
-Write-Verbose -Message "Extracting archives" -Verbose
 
 New-Item -Path GenP_SOURCE -ItemType Directory -Force
 
 & "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=3
+
+Get-ChildItem -Path GenP_SOURCE -File -recurse -force
 
 # Remove first 19 strings of AutoIt3Wrapper_GUI to insert new directives within console ones
 (Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
