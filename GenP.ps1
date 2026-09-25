@@ -2,8 +2,6 @@
 # https://wiki.dbzer0.com/genp-guides/guide#download-directory
 # https://wiki.dbzer0.com/genp-guides/guide/#genp-modgood
 
-New-Item -Path GenP_SOURCE -ItemType Directory -Force
-
 Write-Verbose -Message "Downloading Dependencies" -Verbose
 
 # https://www.autoitscript.com/site/autoit/downloads/
@@ -13,23 +11,24 @@ winget install --id AutoIt.SciTE4AutoIt3 --accept-source-agreements --force
 
 Write-Verbose -Message "Downloading GenP_SOURCE.zip" -Verbose
 
+Write-Host $env:GITHUB_WORKSPACE
+
 # https://wiki.dbzer0.com/genp-guides/guide#download-directory
 $Parameters = @{
-	Uri             = "https://bafybeihxmdurqt2ve6pcgk427jovyvxpdduh422lqeridvscgnlxg3mbeu.ipfs.dweb.link/?filename=GenP_4.2.1_SOURCE.zip&download=true"
+	Uri             = "https://ipfs.filebase.io/ipfs/bafybeihxmdurqt2ve6pcgk427jovyvxpdduh422lqeridvscgnlxg3mbeu?filename=GenP_4.2.1_SOURCE.zip"
 	OutFile         = "GenP_SOURCE.zip"
 	UseBasicParsing = $true
 	Verbose         = $true
 }
 Invoke-WebRequest @Parameters
 
-Write-Verbose -Message "Extracting archives" -Verbose
 
-& "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=2
+New-Item -Path GenP_SOURCE -ItemType Directory -Force
 
-Write-Verbose -Message Building -Verbose
+& "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=3
 
 # Remove first 19 strings of AutoIt3Wrapper_GUI to insert new directives within console ones
-(Get-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
+(Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
 
 # https://www.autoitscript.com/autoit3/docs/directives/pragma-compile.htm
 $Region = @"
@@ -48,7 +47,7 @@ $Region = @"
 #pragma compile(UPX, true)
 #EndRegion
 "@
-$Region, (Get-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Set-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
+$Region, (Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
 
 # Replace upx with the latest one
 # https://github.com/upx/upx
@@ -68,15 +67,15 @@ $Parameters = @{
 Invoke-WebRequest @Parameters
 
 # Extract upx.exe
-& "$env:SystemRoot\System32\tar.exe" -xvf "upx.zip" -C "GenP_SOURCE\GenP" --strip-components=1 upx-$($tag_name)-win64/upx.exe
+& "$env:SystemRoot\System32\tar.exe" -xvf "upx.zip" -C "GenP_SOURCE" --strip-components=1 upx-$($tag_name)-win64/upx.exe
 
 # Instead of compiling as it's written in the build.ps1 from the archive, headless CI enviroment fails to do so, so we need to call Aut2Exe.exe
 # $ArgumentList = "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /NoStatus /in GenP_SOURCE\GenP-v$($env:Version).au3"
 # Start-Process -FilePath "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3_x64.exe" -ArgumentList $ArgumentList -WorkingDirectory GenP_SOURCE
 
-& "${env:ProgramFiles(x86)}\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" /out "GenP_SOURCE\GenP.exe" /x64 /gui
+& "${env:ProgramFiles(x86)}\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "GenP_SOURCE\GenP-v$($env:Version).au3" /out "GenP_SOURCE\GenP.exe" /x64 /gui
 
-# Wait until apk is being downloaded
+# Wait until exe is being compiled
 do
 {
 	$GenP = Test-Path -Path "GenP_SOURCE\GenP.exe"
@@ -85,7 +84,10 @@ do
 	{
 		"Waiting for a GenP file to be compiled..."
 		Get-ChildItem -Path GenP_SOURCE -File
+
 		Start-Sleep -Seconds 5
 	}
 }
 while (-not $GenP)
+
+Test-Path -Path "GenP_SOURCE\GenP.exe"
