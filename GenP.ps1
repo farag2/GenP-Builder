@@ -89,3 +89,5 @@ do
 	}
 }
 while (-not $GenP)
+
+Test-Path -Path "GenP_SOURCE\GenP.exe"
