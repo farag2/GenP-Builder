@@ -27,8 +27,6 @@ New-Item -Path GenP_SOURCE -ItemType Directory -Force
 
 & "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=3
 
-Get-ChildItem -Path GenP_SOURCE -File -recurse -force
-
 # Remove first 19 strings of AutoIt3Wrapper_GUI to insert new directives within console ones
 (Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
 
@@ -49,7 +47,7 @@ $Region = @"
 #pragma compile(UPX, true)
 #EndRegion
 "@
-$Region, (Get-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Set-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
+$Region, (Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
 
 # Replace upx with the latest one
 # https://github.com/upx/upx
@@ -75,7 +73,7 @@ Invoke-WebRequest @Parameters
 # $ArgumentList = "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /NoStatus /in GenP_SOURCE\GenP-v$($env:Version).au3"
 # Start-Process -FilePath "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3_x64.exe" -ArgumentList $ArgumentList -WorkingDirectory GenP_SOURCE
 
-& "${env:ProgramFiles(x86)}\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" /out "GenP_SOURCE\GenP.exe" /x64 /gui
+& "${env:ProgramFiles(x86)}\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "GenP_SOURCE\GenP-v$($env:Version).au3" /out "GenP_SOURCE\GenP.exe" /x64 /gui
 
 # Wait until exe is being compiled
 do
