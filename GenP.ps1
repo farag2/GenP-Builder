@@ -15,7 +15,7 @@ Write-Verbose -Message "Downloading GenP_SOURCE.zip" -Verbose
 
 # https://wiki.dbzer0.com/genp-guides/guide#download-directory
 $Parameters = @{
-	Uri             = "https://bafybeihxmdurqt2ve6pcgk427jovyvxpdduh422lqeridvscgnlxg3mbeu.ipfs.dweb.link/?filename=GenP_4.2.1_SOURCE.zip&download=true"
+	Uri             = "http://140.238.101.171:8080/ipfs/Qme7rKVsBGEP1Dgzhpy8bmyE5E8zUZzzzDNgjLnRED7sJL?filename=GenP.v4.2.1.zip&download=true"
 	OutFile         = "GenP_SOURCE.zip"
 	UseBasicParsing = $true
 	Verbose         = $true
