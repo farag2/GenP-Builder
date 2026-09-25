@@ -22,32 +22,30 @@ $Parameters = @{
 }
 Invoke-WebRequest @Parameters
 
-Write-Verbose -Message "Extracting archives" -Verbose
-
 # Get runner Downloads folder
 $DownloadsFolder = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{374DE290-123F-4565-9164-39C4925E467B}"
+Get-ChildItem -Path $DownloadsFolder -File -recurse -force
 
 # Wait until archive is being downloaded
 do
 {
-	$APK = Test-Path -Path "$DownloadsFolder\*.zip"
+	$ZIP = Test-Path -Path "$DownloadsFolder\*.zip"
 
-	if (-not $APK)
+	if (-not $ZIP)
 	{
 		"Waiting for archive to be downloaded..."
 		Get-ChildItem -Path $DownloadsFolder -File
+
 		Start-Sleep -Seconds 5
 	}
 }
-while (-not $APK)
+while (-not $ZIP)
+
+Write-Verbose -Message "Extracting archives" -Verbose
 
 & "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=3
 
-Write-Verbose -Message Building -Verbose
-
 # Remove first 19 strings of AutoIt3Wrapper_GUI to insert new directives within console ones
-get-childitem GenP_SOURCE -recurse
-
 (Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
 
 # https://www.autoitscript.com/autoit3/docs/directives/pragma-compile.htm
@@ -95,7 +93,7 @@ Invoke-WebRequest @Parameters
 
 & "${env:ProgramFiles(x86)}\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" /out "GenP_SOURCE\GenP.exe" /x64 /gui
 
-# Wait until apk is being downloaded
+# Wait until exe is being compiled
 do
 {
 	$GenP = Test-Path -Path "GenP_SOURCE\GenP.exe"
@@ -104,6 +102,7 @@ do
 	{
 		"Waiting for a GenP file to be compiled..."
 		Get-ChildItem -Path GenP_SOURCE -File
+
 		Start-Sleep -Seconds 5
 	}
 }
