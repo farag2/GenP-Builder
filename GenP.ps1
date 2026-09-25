@@ -29,7 +29,9 @@ Write-Verbose -Message "Extracting archives" -Verbose
 Write-Verbose -Message Building -Verbose
 
 # Remove first 19 strings of AutoIt3Wrapper_GUI to insert new directives within console ones
-(Get-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
+get-childitem GenP_SOURCE -recurse
+
+(Get-Content -Path "GenP_SOURCE\GenP_$($env:Version)_SOURCE\genp-$($env:Version)-src\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP_$($env:Version)_SOURCE\genp-$($env:Version)-src\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
 
 # https://www.autoitscript.com/autoit3/docs/directives/pragma-compile.htm
 $Region = @"
