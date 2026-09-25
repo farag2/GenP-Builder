@@ -24,7 +24,22 @@ Invoke-WebRequest @Parameters
 
 Write-Verbose -Message "Extracting archives" -Verbose
 
-get-item "GenP_SOURCE.zip" | fl *
+# Get runner Downloads folder
+$DownloadsFolder = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{374DE290-123F-4565-9164-39C4925E467B}"
+
+# Wait until archive is being downloaded
+do
+{
+	$APK = Test-Path -Path "$DownloadsFolder\*.zip"
+
+	if (-not $APK)
+	{
+		"Waiting for archive to be downloaded..."
+		Get-ChildItem -Path $DownloadsFolder -File
+		Start-Sleep -Seconds 5
+	}
+}
+while (-not $APK)
 
 & "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=4
 
