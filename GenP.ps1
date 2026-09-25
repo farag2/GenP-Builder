@@ -15,7 +15,7 @@ Write-Verbose -Message "Downloading GenP_SOURCE.zip" -Verbose
 
 # https://wiki.dbzer0.com/genp-guides/guide#download-directory
 $Parameters = @{
-	Uri             = "https://bafybeihxmdurqt2ve6pcgk427jovyvxpdduh422lqeridvscgnlxg3mbeu.ipfs.inbrowser.link/?filename=GenP_4.2.1_SOURCE.zip&download=true"
+	Uri             = "https://ipfs.filebase.io/ipfs/bafybeihxmdurqt2ve6pcgk427jovyvxpdduh422lqeridvscgnlxg3mbeu?filename=GenP_4.2.1_SOURCE.zip"
 	OutFile         = "GenP_SOURCE.zip"
 	UseBasicParsing = $true
 	Verbose         = $true
@@ -41,14 +41,14 @@ do
 }
 while (-not $APK)
 
-& "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=4
+& "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=3
 
 Write-Verbose -Message Building -Verbose
 
 # Remove first 19 strings of AutoIt3Wrapper_GUI to insert new directives within console ones
 get-childitem GenP_SOURCE -recurse
 
-(Get-Content -Path "GenP_SOURCE\GenP_$($env:Version)_SOURCE\genp-$($env:Version)-src\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP_$($env:Version)_SOURCE\genp-$($env:Version)-src\GenP\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
+(Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
 
 # https://www.autoitscript.com/autoit3/docs/directives/pragma-compile.htm
 $Region = @"
