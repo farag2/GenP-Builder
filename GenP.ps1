@@ -24,7 +24,9 @@ Invoke-WebRequest @Parameters
 
 Write-Verbose -Message "Extracting archives" -Verbose
 
-& "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=2
+get-item "GenP_SOURCE.zip" | fl *
+
+& "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=4
 
 Write-Verbose -Message Building -Verbose
 
