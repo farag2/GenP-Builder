@@ -16,25 +16,24 @@ Write-Verbose -Message "Downloading GenP_SOURCE.zip" -Verbose
 # https://wiki.dbzer0.com/genp-guides/guide#download-directory
 $Parameters = @{
 	Uri             = "https://ipfs.filebase.io/ipfs/bafybeihxmdurqt2ve6pcgk427jovyvxpdduh422lqeridvscgnlxg3mbeu?filename=GenP_4.2.1_SOURCE.zip"
-	OutFile         = "GenP_SOURCE.zip"
+	OutFile         = "GenP-Builder\GenP_SOURCE.zip"
 	UseBasicParsing = $true
 	Verbose         = $true
 }
 Invoke-WebRequest @Parameters
 
 # Get runner Downloads folder
-$DownloadsFolder = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders" -Name "{374DE290-123F-4565-9164-39C4925E467B}"
-Get-ChildItem -Path $DownloadsFolder -File -recurse -force
+Get-ChildItem -Path GenP-Builder -File -recurse -force
 
 # Wait until archive is being downloaded
 do
 {
-	$ZIP = Test-Path -Path "$DownloadsFolder\*.zip"
+	$ZIP = Test-Path -Path "GenP-Builder\*.zip"
 
 	if (-not $ZIP)
 	{
 		"Waiting for archive to be downloaded..."
-		Get-ChildItem -Path $DownloadsFolder -File
+		Get-ChildItem -Path GenP-Builder -File
 
 		Start-Sleep -Seconds 5
 	}
@@ -43,7 +42,7 @@ while (-not $ZIP)
 
 Write-Verbose -Message "Extracting archives" -Verbose
 
-& "$env:SystemRoot\System32\tar.exe" -xvf "GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=3
+& "$env:SystemRoot\System32\tar.exe" -xvf "GenP-Builder\GenP_SOURCE.zip" -C "GenP_SOURCE" --strip-components=3
 
 # Remove first 19 strings of AutoIt3Wrapper_GUI to insert new directives within console ones
 (Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force) | Select-Object -Skip 19 | Set-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding utf8NoBOM -Force
