@@ -67,7 +67,7 @@ $Parameters = @{
 Invoke-WebRequest @Parameters
 
 # Extract upx.exe
-& "$env:SystemRoot\System32\tar.exe" -xvf "upx.zip" -C "GenP_SOURCE\GenP" --strip-components=1 upx-$($tag_name)-win64/upx.exe
+& "$env:SystemRoot\System32\tar.exe" -xvf "upx.zip" -C "GenP_SOURCE" --strip-components=1 upx-$($tag_name)-win64/upx.exe
 
 # Instead of compiling as it's written in the build.ps1 from the archive, headless CI enviroment fails to do so, so we need to call Aut2Exe.exe
 # $ArgumentList = "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /NoStatus /in GenP_SOURCE\GenP-v$($env:Version).au3"
