@@ -18,18 +18,6 @@ Build GenP patcher from the official [sources](https://wiki.dbzer0.com/genp-guid
 > [!WARNING]  
 > This repository is not affiliated with Adobe. The source code is provided as is and for educational purposes only. Use at your own risk. Using piracy software is an illegal act. No compiled binaries provided.
 
-## Usage
-
-* Fork the repository
-
-```powershell
-git clone https://github.com/farag2/GenP-Builder
-```
-
-* Edit download link in `GenP.ps1` file and run `Build GenP` workflow with setting release name according to the GenP version from the [site](https://wiki.dbzer0.com/genp-guides/guide/#latest).
-
-<img width="1936" height="692" src="https://github.com/user-attachments/assets/d6e741ce-16c3-4de4-a083-996b5eba56c6" />
-
 ## Link
 
 * [Official GenP source code](https://wiki.dbzer0.com/genp-guides/guide)
