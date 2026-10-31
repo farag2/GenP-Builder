@@ -1,3 +1,5 @@
+#Requires -Version 7.0
+
 # https://wiki.dbzer0.com/genp-guides/guide/#latest
 # https://wiki.dbzer0.com/genp-guides/guide#download-directory
 # https://wiki.dbzer0.com/genp-guides/guide/#genp-modgood
@@ -51,12 +53,18 @@ $Region, (Get-Content -Path "GenP_SOURCE\GenP-v$($env:Version).au3" -Encoding ut
 
 # Replace upx with the latest one
 # https://github.com/upx/upx
+$Headers = @{
+	Accept        = "application/vnd.github+json"
+	Authorization = "Bearer $env:GITHUB_TOKEN"
+}
 $Parameters = @{
 	Uri             = "https://api.github.com/repos/upx/upx/releases/latest"
+	Headers         = $Headers
 	UseBasicParsing = $true
 }
 $Response = Invoke-RestMethod @Parameters
 $tag_name = $Response.tag_name.Replace("v","")
+
 $UPX_URL = ($Response.assets | Where-Object -FilterScript {$_.Name -match "win64"}).browser_download_url
 $Parameters = @{
 	Uri             = $UPX_URL
@@ -69,10 +77,7 @@ Invoke-WebRequest @Parameters
 # Extract upx.exe
 & "$env:SystemRoot\System32\tar.exe" -xvf "upx.zip" -C "GenP_SOURCE" --strip-components=1 upx-$($tag_name)-win64/upx.exe
 
-# Instead of compiling as it's written in the build.ps1 from the archive, headless CI enviroment fails to do so, so we need to call Aut2Exe.exe
-# $ArgumentList = "`"${env:ProgramFiles(x86)}\AutoIt3\SciTE\AutoIt3Wrapper\AutoIt3Wrapper.au3`" /NoStatus /in GenP_SOURCE\GenP-v$($env:Version).au3"
-# Start-Process -FilePath "${env:ProgramFiles(x86)}\AutoIt3\AutoIt3_x64.exe" -ArgumentList $ArgumentList -WorkingDirectory GenP_SOURCE
-
+# Compile
 & "${env:ProgramFiles(x86)}\AutoIt3\Aut2Exe\Aut2Exe.exe" /in "GenP_SOURCE\GenP-v$($env:Version).au3" /out "GenP_SOURCE\GenP.exe" /x64 /gui
 
 # Wait until exe is being compiled

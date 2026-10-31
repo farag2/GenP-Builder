@@ -19,6 +19,7 @@ jobs:
 
       - name: Downloading dependencies and building
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           Version: ${{ inputs.tag }}
         run: |
           .\GenP.ps1
